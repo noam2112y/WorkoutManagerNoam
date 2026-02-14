@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:WorkoutManagerNoam.ViewModels"
+             x:Class="WorkoutManagerNoam.Views.SignUpPage"
+             x:DataType="vm:SignUpViewModel"
+             Title="SignUp">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Offset="0.0" Color="#004FF9" />
+            <GradientStop Offset="1.0" Color="#FFF94C" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="12">
+
+            <Label Text="Create Account"
+                   FontSize="26"
+                   TextColor="Black"
+                   HorizontalOptions="Center"/>
+
+            <Entry Placeholder="First Name"
+                   Text="{Binding FirstName}"
+                  TextColor="Black"/>
+
+            <Entry Placeholder="Last Name"
+                   Text="{Binding LastName}"
+                   TextColor="Black"/>
+
+            <Entry Placeholder="Email"
+                   Keyboard="Email"
+                   Text="{Binding UserEmail}"
+                   TextColor="Black">
+                <Entry.Behaviors>
+                    <toolkit:EmailValidationBehavior Flags="ValidateOnValueChanged"/>
+                </Entry.Behaviors>
+            </Entry>
+
+            <Grid ColumnDefinitions="*,Auto">
+                <Entry Placeholder="Password"
+                       IsPassword="{Binding EntryAsPassword}"
+                       Text="{Binding UserPassword}"
+                       TextColor="Black"/>
+
+                <Button Grid.Column="1"
+                        BackgroundColor="Transparent"
+                        FontFamily="MaterialIcons"
+                        Text="{Binding PasswordIconCode}"
+                        TextColor="Black"                        
+                        Command="{Binding TogglePasswordCommand}"/>
+            </Grid>
+
+            <Entry Placeholder="Mobile"
+                   Keyboard="Telephone"
+                   Text="{Binding Mobile}"
+                   TextColor="Black"/>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}" />
+
+            <Button Text="Sign Up"
+                    HeightRequest="55"
+                    CornerRadius="8"
+                    TextColor="Black"
+                    Command="{Binding SignUpCommand}" />
+
+            <Button Text="Back to SignIn"
+                    BackgroundColor="Transparent"
+                    TextColor="BlueViolet"
+                    Command="{Binding BackToSignInCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

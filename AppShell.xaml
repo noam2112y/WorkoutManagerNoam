@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="WorkoutManagerNoam.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:WorkoutManagerNoam.Views"
+    Title="MyNavigation">
+
+    <Shell.TitleView>
+        <HorizontalStackLayout>
+
+            <!-- Logout -->
+            <Button
+                Margin="5"
+                BackgroundColor="Wheat"
+                Command="{Binding LogoutCommand}"
+                FontSize="24"
+                FontFamily="MaterialIcons"
+                TextColor="Black"
+                Text="&#xe9ba;"
+                HorizontalOptions="Start" />
+
+            <!-- Admin (מופיע רק לאדמין) -->
+            <Button
+                Margin="0,5,5,5"
+                BackgroundColor="Wheat"
+                Command="{Binding AdminLoginCommand}"
+                FontSize="24"
+                FontFamily="MaterialIcons"
+                TextColor="Black"
+                Text="&#xf02e;"
+                HorizontalOptions="Start"
+                IsVisible="{Binding IsAdmin}" />
+        </HorizontalStackLayout>
+    </Shell.TitleView>
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+</Shell>
