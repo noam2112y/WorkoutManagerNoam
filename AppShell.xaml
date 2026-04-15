@@ -30,7 +30,7 @@
                 TextColor="Black"
                 Text="&#xf02e;"
                 HorizontalOptions="Start"
-                IsVisible="{Binding IsAdmin}" />
+                IsVisible="{Binding IsParent}" />
         </HorizontalStackLayout>
     </Shell.TitleView>
 

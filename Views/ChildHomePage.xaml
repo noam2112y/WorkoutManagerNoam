@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WorkoutManagerNoam.Views.ChildHomePage"
+             Title="Child Home">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+
+            <Label Text="Child Account"
+                   FontSize="30"
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold" />
+
+            <Label x:Name="WelcomeLabel"
+                   Text="Welcome"
+                   FontSize="20"
+                   HorizontalOptions="Center" />
+
+            <Label x:Name="BalanceLabel"
+                   Text="Balance: 0"
+                   FontSize="22"
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold" />
+            <Label x:Name="TodaySpentLabel"
+                   Text="Today spent: 0"
+                   FontSize="18"
+                   HorizontalOptions="Center" />
+
+            <Label x:Name="TodaySOSLabel"
+                   Text="Today SOS: 0"
+                   FontSize="18"
+                   HorizontalOptions="Center" />
+
+            <Button Text="Add Expense"
+                    Clicked="AddExpense_Clicked" />
+
+            <Button Text="SOS"
+                    Clicked="SOS_Clicked" />
+
+            <Button Text="Finish Day"
+                    Clicked="FinishDay_Clicked" />
+
+            <Button Text="Challenges"
+                    Clicked="Challenges_Clicked" />
+
+            <Button Text="Daily Recommendations"
+                    Clicked="DailyRecommendations_Clicked" />
+            <Button Text="Start New Day"
+                Clicked="StartNewDay_Clicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

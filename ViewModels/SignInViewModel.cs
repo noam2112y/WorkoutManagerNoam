@@ -12,12 +12,12 @@ namespace WorkoutManagerNoam.ViewModels
         private readonly IDBService _db;
         private readonly IServiceProvider _sp;
 
-        private string _userName;
-        private string _password;
+        private string _FirstName = "";
+        private string _password = "";
         private bool _isRememberMeChecked;
         private bool _entryAsPassword = true;
-        private bool _signInMessageVisible = false;
-        private string _loginMassage;
+        private bool _signInMessageVisible;
+        private string _loginMassage = "";
 
         private string _passIcon = FontHelper.CLOSED_EYE_ICON;
 
@@ -33,7 +33,7 @@ namespace WorkoutManagerNoam.ViewModels
             _sp = serviceProvider;
 
             ShowPasswordCommand = new Command(TogglePasswordButton);
-            SignInCommand = new Command(SignInButtonClick);
+            SignInCommand = new Command(async () => await SignInButtonClick());
 
             NavigateToSignUpCommand = new Command(async () =>
             {
@@ -41,22 +41,27 @@ namespace WorkoutManagerNoam.ViewModels
                     return;
 
                 SignUpPage page = _sp.GetService(typeof(SignUpPage)) as SignUpPage;
-                await Navigation.PushAsync(page);
+                if (page != null)
+                    await Navigation.PushAsync(page);
             });
         }
 
         public bool EntryAsPassword
         {
             get => _entryAsPassword;
-            set { _entryAsPassword = value; OnPropertyChanged(); }
-        }
-
-        public string UserName
-        {
-            get => _userName;
             set
             {
-                _userName = value;
+                _entryAsPassword = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string FirstName
+        {
+            get => _FirstName;
+            set
+            {
+                _FirstName = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsSignInButtonEnabled));
             }
@@ -75,7 +80,7 @@ namespace WorkoutManagerNoam.ViewModels
 
         public bool RememberMeChecked
         {
-            get { return _isRememberMeChecked; }
+            get => _isRememberMeChecked;
             set
             {
                 if (_isRememberMeChecked != value)
@@ -88,35 +93,48 @@ namespace WorkoutManagerNoam.ViewModels
 
         public bool IsSignInButtonEnabled
         {
-            get => !(string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(UserPassword));
+            get => !(string.IsNullOrEmpty(FirstName) || string.IsNullOrEmpty(UserPassword));
         }
 
         public bool SingInMessageVisible
         {
             get => _signInMessageVisible;
-            set { _signInMessageVisible = value; OnPropertyChanged(); }
+            set
+            {
+                _signInMessageVisible = value;
+                OnPropertyChanged();
+            }
         }
 
         public string LoginMessage
         {
             get => _loginMassage;
-            set { _loginMassage = value; OnPropertyChanged(); }
+            set
+            {
+                _loginMassage = value;
+                OnPropertyChanged();
+            }
         }
 
         public string PassIcon
         {
             get => _passIcon;
-            set { _passIcon = value; OnPropertyChanged(); }
+            set
+            {
+                _passIcon = value;
+                OnPropertyChanged();
+            }
         }
 
         public void Reset()
         {
-            UserName = "";
+            FirstName = "";
             UserPassword = "";
             LoginMessage = "";
             SingInMessageVisible = false;
             EntryAsPassword = true;
             PassIcon = FontHelper.CLOSED_EYE_ICON;
+            RememberMeChecked = false;
         }
 
         private void TogglePasswordButton()
@@ -125,73 +143,86 @@ namespace WorkoutManagerNoam.ViewModels
             PassIcon = EntryAsPassword ? FontHelper.CLOSED_EYE_ICON : FontHelper.OPEN_EYE_ICON;
         }
 
-        private void SignInButtonClick()
+        private async Task SignInButtonClick()
         {
             SingInMessageVisible = true;
+            LoginMessage = "";
 
-            if (!_db.IsExist(UserName, UserPassword))
+            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(UserPassword))
             {
-                LoginMessage = "user not exist";
-                AppState.IsAdminLoggedIn = false;
-                AppState.AdminUser = null;
+                LoginMessage = "Please fill all fields";
                 return;
             }
 
-            // ✅ להביא את המשתמש פעם אחת
-            User current = _db.GetUserByEmail(UserName);
+            if (!_db.IsExist(FirstName, UserPassword))
+            {
+                LoginMessage = "User does not exist";
+                AppState.CurrentUser = null;
+                return;
+            }
+
+            User current = _db.GetUserByEmail(FirstName);
+
+            if (current == null)
+            {
+                LoginMessage = "User does not exist";
+                AppState.CurrentUser = null;
+                return;
+            }
+
+            AppState.CurrentUser = current;
             (Application.Current as App)!.CurrentUser = current;
 
-            // ✅ הכי חשוב: להרים/להוריד את מצב האדמין
-            if (current != null && current.IsAdmin)
-            {
-                AppState.IsAdminLoggedIn = true;
-                AppState.AdminUser = current;
-            }
-            else
-            {
-                AppState.IsAdminLoggedIn = false;
-                AppState.AdminUser = null;
-            }
-
-            // ✅ Remember me
             if (RememberMeChecked)
             {
-                SecureStorage.Default.SetAsync("current_user_object", UserName);
+                await SecureStorage.Default.SetAsync("current_user_object", FirstName);
             }
             else
             {
                 SecureStorage.Default.Remove("current_user_object");
             }
 
-            // לעדכן VM של ה-Shell כדי שיראו כפתורי Admin/Logout נכון
-            AppShellViewModel shellVm =
-                IPlatformApplication.Current!.Services.GetService(typeof(AppShellViewModel)) as AppShellViewModel;
-            shellVm?.RefreshAdminState();
+            AppShell shell =
+                IPlatformApplication.Current!.Services.GetService(typeof(AppShell)) as AppShell;
+
+            if (shell == null)
+                return;
+
+            Application.Current!.MainPage = shell;
+
+            if (current.IsParent)
+                await Shell.Current.GoToAsync(nameof(ParentHomePage));
+            else
+                await Shell.Current.GoToAsync(nameof(ChildHomePage));
+        }
+
+        internal async void OnAppearing()
+        {
+            string? token = await SecureStorage.Default.GetAsync("current_user_object");
+
+            if (string.IsNullOrEmpty(token))
+                return;
+
+            User user = _db.GetUserByEmail(token);
+
+            if (user == null)
+                return;
+
+            AppState.CurrentUser = user;
+            (App.Current as App)!.CurrentUser = user;
 
             AppShell shell =
                 IPlatformApplication.Current!.Services.GetService(typeof(AppShell)) as AppShell;
 
-            Application.Current!.MainPage = shell;
-        }
-        /*
-        internal async void OnAppearing()
-        {
-            // chack if user exist in storage
-            string? token = await SecureStorage.Default.GetAsync("current_user_object");
-            if (!string.IsNullOrEmpty(token))
-            {
-                User user = _db.GetUserByEmail(token);
-                if (user != null)
-                {
-                    // set current user 
-                    (App.Current as App)!.CurrentUser = user;
-                    //navigte to main page of shell
-                    var mainPage = IPlatformApplication.Current!.Services.GetService<AppShell>();
-                    Application.Current!.Windows[0].Page = mainPage;
-                }
-            }
+            if (shell == null)
+                return;
 
+            Application.Current!.MainPage = shell;
+
+            if (user.IsParent)
+                await Shell.Current.GoToAsync(nameof(ParentHomePage));
+            else
+                await Shell.Current.GoToAsync(nameof(ChildHomePage));
         }
-        */
     }
 }

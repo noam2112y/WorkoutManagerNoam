@@ -21,7 +21,7 @@ namespace WorkoutManagerNoam.Service
     {
         private static List<User> _users = new List<User>()
         {
-            new User { Id=1, FirstName="Noam", LastName="1234567890", UserEmail="Noam", UserPassword="1234567890", UMobile="0500000000", IsAdmin=true, RegDate=System.DateTime.Now },
+            new User { Id=1, FirstName="Noam", LastName="1234567890", UserEmail="Noam", UserPassword="1234567890", UMobile="0500000000", IsParent=true, RegDate=System.DateTime.Now },
             new User { Id=2, FirstName="AA", LastName="BB", UserEmail="User1@gmail.com", UserPassword="pass1", UMobile="0501111111", RegDate=System.DateTime.Now },
             new User { Id=3, FirstName="CC", LastName="DD", UserEmail="user2@gmail.com", UserPassword="pass2", UMobile="0502222222", RegDate=System.DateTime.Now }
         };

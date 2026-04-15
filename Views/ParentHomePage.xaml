@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WorkoutManagerNoam.Views.ParentHomePage"
+             Title="Parent Home">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+
+            <Label Text="Parent Account"
+                   FontSize="30"
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold" />
+
+            <Label Text="Choose a child"
+                   FontSize="18"
+                   HorizontalOptions="Center" />
+
+            <Picker x:Name="ChildrenPicker"
+                    Title="Select Child"
+                    SelectedIndexChanged="ChildrenPicker_SelectedIndexChanged" />
+
+            <Label x:Name="ChildLabel"
+                   Text="No child selected"
+                   FontSize="18"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Choose amount to add"
+                   FontSize="18"
+                   HorizontalOptions="Center" />
+
+            <Button Text="Add 50"
+                    Clicked="Add50_Clicked" />
+
+            <Button Text="Add 100"
+                    Clicked="Add100_Clicked" />
+
+            <Button Text="Add 200"
+                    Clicked="Add200_Clicked" />
+
+            <Label x:Name="AmountLabel"
+                   Text="Selected amount: 0"
+                   FontSize="18"
+                   HorizontalOptions="Center" />
+            <Button Text="View Expenses"
+                Clicked="ViewExpenses_Clicked" />
+            <Button Text="Expense Days"
+                Clicked="ExpenseDays_Clicked" />
+
+            <Button Text="Add Challenge"
+                Clicked="AddChallenge_Clicked" />
+
+            <Button Text="Continue to Payment"
+                    Clicked="ContinueToPayment_Clicked" />
+            
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

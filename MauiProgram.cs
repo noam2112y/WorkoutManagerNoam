@@ -8,7 +8,6 @@ namespace WorkoutManagerNoam
 {
     public static class MauiProgram
     {
-        // ✅ במקום Current – נשמור IServiceProvider אמיתי
         public static IServiceProvider Services { get; private set; }
 
         public static MauiApp CreateMauiApp()
@@ -34,8 +33,6 @@ namespace WorkoutManagerNoam
 #endif
 
             MauiApp app = builder.Build();
-
-            // ✅ שומרים גישה לשירותים
             Services = app.Services;
 
             return app;
@@ -43,33 +40,47 @@ namespace WorkoutManagerNoam
 
         public static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
         {
-            // Pages
-            builder.Services.AddSingleton<SignInPage>();
+            builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<MainPageViewModel>();
             builder.Services.AddTransient<SignUpPage>();
-            builder.Services.AddTransient<UsersListPage>();
 
-            // אם יש לך UserDetailsPage – כדאי לרשום גם אותו:
-            builder.Services.AddTransient<UserDetailsPage>();
+            builder.Services.AddTransient<ParentHomePage>();
+            builder.Services.AddTransient<ChildHomePage>();
+            builder.Services.AddTransient<PaymentPage>();
+
+            builder.Services.AddTransient<ChallengesPage>();
+            builder.Services.AddTransient<DailyRecommendationsPage>();
+            builder.Services.AddTransient<ChildExpensePage>();
+            builder.Services.AddTransient<AddChallengePage>();
+            builder.Services.AddTransient<ChallengesPage>();
+            builder.Services.AddTransient<SOSPage>();
+            builder.Services.AddTransient<ParentExpensesPage>();
+            builder.Services.AddTransient<ChildExpensePage>();
+            builder.Services.AddTransient<ExpenseDaysPage>();
+            builder.Services.AddTransient<DailySummaryPage>();
+
+            builder.Services.AddTransient<AppShell>();
 
             return builder;
         }
 
         public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
         {
-            // ViewModels
+            builder.Services.AddSingleton<MainPageViewModel>();
+
             builder.Services.AddSingleton<SignInViewModel>();
             builder.Services.AddTransient<SignUpViewModel>();
+
             builder.Services.AddSingleton<AppShellViewModel>();
-            builder.Services.AddTransient<UsersListPageViewModel>();
+
+            //builder.Services.AddTransient<UsersListPageViewModel>();
 
             return builder;
         }
 
         public static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
         {
-            // Services
             builder.Services.AddSingleton<IDBService, DBMokup>();
-            builder.Services.AddTransient<AppShell>();
 
             return builder;
         }

@@ -9,15 +9,15 @@ namespace WorkoutManagerNoam.ViewModels
     {
         private readonly Page _signInPage;
 
-        private bool _isAdmin;
-        public bool IsAdmin
+        private bool _IsParent;
+        public bool IsParent
         {
-            get => _isAdmin;
+            get => _IsParent;
             private set
             {
-                if (_isAdmin != value)
+                if (_IsParent != value)
                 {
-                    _isAdmin = value;
+                    _IsParent = value;
                     OnPropertyChanged();
                 }
             }
@@ -33,26 +33,21 @@ namespace WorkoutManagerNoam.ViewModels
             RefreshAdminState();
 
             LogoutCommand = new Command(Logout);
-            AdminLoginCommand = new Command(OpenAdminPage);
         }
 
         public void RefreshAdminState()
         {
-            IsAdmin = (Application.Current as App)?.CurrentUser?.IsAdmin ?? false;
+            IsParent = (Application.Current as App)?.CurrentUser?.IsParent ?? false;
         }
 
-        private async void OpenAdminPage(object obj)
-        {
-            if (IsAdmin)
-                await Shell.Current.GoToAsync(nameof(UsersListPage));
-        }
+        
 
         private void Logout(object obj)
         {
             (Application.Current as App)!.CurrentUser = null;
 
-            AppState.IsAdminLoggedIn = false;
-            AppState.AdminUser = null;
+            //AppState.IsParentLoggedIn = false;
+            //AppState.AdminUser = null;
 
             RefreshAdminState();
 

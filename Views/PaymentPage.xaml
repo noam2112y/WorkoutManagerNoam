@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="WorkoutManagerNoam.Views.PaymentPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Payment">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="15">
+
+            <Label
+                FontAttributes="Bold"
+                FontSize="30"
+                HorizontalOptions="Center"
+                Text="Payment" />
+
+            <Label
+                x:Name="AmountLabel"
+                FontSize="20"
+                HorizontalOptions="Center"
+                Text="Amount: 0" />
+
+            <Entry x:Name="CardHolderEntry" Placeholder="Card Holder Name" />
+
+            <Entry
+                x:Name="CardNumberEntry"
+                Keyboard="Numeric"
+                Placeholder="Card Number" />
+
+            <HorizontalStackLayout Spacing="10">
+                <Entry
+                    x:Name="ExpiryEntry"
+                    HorizontalOptions="FillAndExpand"
+                    Placeholder="MM/YY" />
+
+                <Entry
+                    x:Name="CvvEntry"
+                    HorizontalOptions="FillAndExpand"
+                    Keyboard="Numeric"
+                    Placeholder="CVV" />
+            </HorizontalStackLayout>
+
+            <Button Clicked="PayNow_Clicked" Text="Pay Now" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

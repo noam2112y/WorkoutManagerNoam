@@ -6,17 +6,16 @@ public partial class App : Application
 {
     public Models.User? CurrentUser { get; set; }
 
-    private readonly SignInPage _signInPage;
+    private readonly MainPage _mainPage;
 
-    public App(SignInPage signInPage)
+    public App(MainPage mainPage)
     {
         InitializeComponent();
-        _signInPage = signInPage;
+        _mainPage = mainPage;
     }
 
-    // ✅ ב-Windows/NET9 זה יותר יציב מלהגדיר MainPage ישירות
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new NavigationPage(_signInPage));
+        return new Window(new NavigationPage(_mainPage));
     }
 }

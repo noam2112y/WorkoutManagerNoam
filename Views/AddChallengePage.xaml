@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WorkoutManagerNoam.Views.AddChallengePage"
+             Title="Add Challenge">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="20">
+
+            <Label Text="Add Challenge"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Entry x:Name="TitleEntry"
+                   Placeholder="Challenge title" />
+
+            <Picker x:Name="CategoryPicker" Title="Choose Category">
+                <Picker.Items>
+                    <x:String>Food</x:String>
+                    <x:String>Entertainment</x:String>
+                    <x:String>Transport</x:String>
+                    <x:String>Shopping</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Entry x:Name="MaxAmountEntry"
+                   Placeholder="Max amount per day"
+                   Keyboard="Numeric" />
+
+            <Button Text="Save Challenge"
+                    Clicked="SaveChallenge_Clicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>  

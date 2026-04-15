@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WorkoutManagerNoam.Views.DailySummaryPage"
+             Title="Daily Summary">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label x:Name="DateLabel"
+                   Text="Daily Summary"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Border Stroke="LightGray" StrokeThickness="1" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label x:Name="FoodLabel" Text="Food: ₪0" FontSize="18" />
+                    <Label x:Name="EntertainmentLabel" Text="Entertainment: ₪0" FontSize="18" />
+                    <Label x:Name="TransportLabel" Text="Transport: ₪0" FontSize="18" />
+                    <Label x:Name="ShoppingLabel" Text="Shopping: ₪0" FontSize="18" />
+                    <Label x:Name="SOSLabel" Text="SOS: ₪0" FontSize="18" />
+                    <Label x:Name="RewardsLabel" Text="Rewards Claimed: ₪0" FontSize="18" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border StrokeThickness="1" Padding="15">
+                <Label x:Name="ResultLabel"
+                       Text="Day Result"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+            </Border>
+
+            <Button Text="View All Expenses For This Day"
+                    Clicked="ViewExpenses_Clicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

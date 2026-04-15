@@ -1,6 +1,7 @@
 ﻿using WorkoutManagerNoam.Helper;
 using WorkoutManagerNoam.Models;
 using WorkoutManagerNoam.Service;
+using WorkoutManagerNoam.Views;
 using System.Windows.Input;
 
 namespace WorkoutManagerNoam.ViewModels
@@ -11,17 +12,26 @@ namespace WorkoutManagerNoam.ViewModels
 
         public INavigation Navigation { get; set; }
 
-        private string _firstName;
-        private string _lastName;
-        private string _userEmail;
-        private string _userPassword;
-        private string _mobile;
+        private string _firstName = "";
+        private string _lastName = "";
+        private string _userEmail = "";
+        private string _userPassword = "";
+        private string _mobile = "";
+        private bool _isParent;
 
         private bool _entryAsPassword = true;
         private string _passwordIconCode = FontHelper.CLOSED_EYE_ICON;
 
         private bool _isBusy;
-
+        public bool IsParent
+        {
+            get => _isParent;
+            set
+            {
+                _isParent = value;
+                OnPropertyChanged();
+            }
+        }
         public string FirstName
         {
             get => _firstName;
@@ -51,6 +61,8 @@ namespace WorkoutManagerNoam.ViewModels
             get => _mobile;
             set { _mobile = value; OnPropertyChanged(); }
         }
+
+        
 
         public bool EntryAsPassword
         {
@@ -86,7 +98,9 @@ namespace WorkoutManagerNoam.ViewModels
         private void TogglePassword()
         {
             EntryAsPassword = !EntryAsPassword;
-            PasswordIconCode = EntryAsPassword ? FontHelper.CLOSED_EYE_ICON : FontHelper.OPEN_EYE_ICON;
+            PasswordIconCode = EntryAsPassword
+                ? FontHelper.CLOSED_EYE_ICON
+                : FontHelper.OPEN_EYE_ICON;
         }
 
         private async Task GoBack()
@@ -111,15 +125,14 @@ namespace WorkoutManagerNoam.ViewModels
             if (first == "" || last == "" || email == "" || pass == "" || mobile == "")
             {
                 IsBusy = false;
-                await Application.Current!.MainPage.DisplayAlert("שגיאה", "מלא/י את כל השדות", "OK");
+                await Application.Current!.MainPage.DisplayAlert("Error", "Please fill all fields", "OK");
                 return;
             }
 
-            // אימייל כבר קיים?
             if (_db.GetUserByEmail(email) != null)
             {
                 IsBusy = false;
-                await Application.Current!.MainPage.DisplayAlert("שגיאה", "האימייל כבר רשום במערכת", "OK");
+                await Application.Current!.MainPage.DisplayAlert("Error", "This email already exists", "OK");
                 return;
             }
 
@@ -130,24 +143,30 @@ namespace WorkoutManagerNoam.ViewModels
                 UserEmail = email,
                 UserPassword = pass,
                 UMobile = mobile,
-                IsAdmin = false,
+                IsParent = IsParent,
+                Balance = IsParent ? 0 : 100,
                 RegDate = DateTime.Now
             };
 
             _db.AddUser(newUser);
 
+            AppState.CurrentUser = newUser;
             (Application.Current as App)!.CurrentUser = newUser;
-
-            AppShellViewModel shellVm =
-                IPlatformApplication.Current!.Services.GetService(typeof(AppShellViewModel)) as AppShellViewModel;
-            shellVm?.RefreshAdminState();
 
             AppShell shell =
                 IPlatformApplication.Current!.Services.GetService(typeof(AppShell)) as AppShell;
 
             IsBusy = false;
 
+            if (shell == null)
+                return;
+
             Application.Current!.MainPage = shell;
+
+            if (newUser.IsParent)
+                await Shell.Current.GoToAsync(nameof(ParentHomePage));
+            else
+                await Shell.Current.GoToAsync(nameof(ChildHomePage));
         }
     }
 }

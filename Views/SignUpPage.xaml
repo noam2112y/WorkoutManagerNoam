@@ -1,76 +1,63 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:WorkoutManagerNoam.ViewModels"
-             x:Class="WorkoutManagerNoam.Views.SignUpPage"
-             x:DataType="vm:SignUpViewModel"
-             Title="SignUp">
-
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Offset="0.0" Color="#004FF9" />
-            <GradientStop Offset="1.0" Color="#FFF94C" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+<ContentPage
+    x:Class="WorkoutManagerNoam.Views.SignUpPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Sign Up"
+    Shell.NavBarIsVisible="False">
 
     <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="12">
+        <VerticalStackLayout Padding="30" Spacing="18">
 
-            <Label Text="Create Account"
-                   FontSize="26"
-                   TextColor="Black"
-                   HorizontalOptions="Center"/>
+            <Label
+                FontAttributes="Bold"
+                FontSize="30"
+                HorizontalOptions="Center"
+                Text="Create Account" />
 
-            <Entry Placeholder="First Name"
-                   Text="{Binding FirstName}"
-                  TextColor="Black"/>
+            <Entry Placeholder="First Name" Text="{Binding FirstName}" />
 
-            <Entry Placeholder="Last Name"
-                   Text="{Binding LastName}"
-                   TextColor="Black"/>
+            <Entry Placeholder="Last Name" Text="{Binding LastName}" />
 
-            <Entry Placeholder="Email"
-                   Keyboard="Email"
-                   Text="{Binding UserEmail}"
-                   TextColor="Black">
-                <Entry.Behaviors>
-                    <toolkit:EmailValidationBehavior Flags="ValidateOnValueChanged"/>
-                </Entry.Behaviors>
-            </Entry>
+            <Entry
+                Keyboard="Email"
+                Placeholder="Email"
+                Text="{Binding UserEmail}" />
 
             <Grid ColumnDefinitions="*,Auto">
-                <Entry Placeholder="Password"
-                       IsPassword="{Binding EntryAsPassword}"
-                       Text="{Binding UserPassword}"
-                       TextColor="Black"/>
+                <Entry
+                    IsPassword="{Binding EntryAsPassword}"
+                    Placeholder="Password"
+                    Text="{Binding UserPassword}" />
 
-                <Button Grid.Column="1"
-                        BackgroundColor="Transparent"
-                        FontFamily="MaterialIcons"
-                        Text="{Binding PasswordIconCode}"
-                        TextColor="Black"                        
-                        Command="{Binding TogglePasswordCommand}"/>
+                <Button
+                    Grid.Column="1"
+                    BackgroundColor="Transparent"
+                    Command="{Binding TogglePasswordCommand}"
+                    FontFamily="FaSolid"
+                    Text="{Binding PasswordIconCode}"
+                    WidthRequest="50" />
             </Grid>
 
-            <Entry Placeholder="Mobile"
-                   Keyboard="Telephone"
-                   Text="{Binding Mobile}"
-                   TextColor="Black"/>
+            <Entry
+                Keyboard="Telephone"
+                Placeholder="Mobile"
+                Text="{Binding Mobile}" />
 
-            <ActivityIndicator IsRunning="{Binding IsBusy}"
-                               IsVisible="{Binding IsBusy}" />
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Parent Account" VerticalOptions="Center" />
+                <Switch IsToggled="{Binding IsParent}" VerticalOptions="Center" />
+            </HorizontalStackLayout>
 
-            <Button Text="Sign Up"
-                    HeightRequest="55"
-                    CornerRadius="8"
-                    TextColor="Black"
-                    Command="{Binding SignUpCommand}" />
+            <Button Command="{Binding SignUpCommand}" Text="Sign Up" />
 
-            <Button Text="Back to SignIn"
-                    BackgroundColor="Transparent"
-                    TextColor="BlueViolet"
-                    Command="{Binding BackToSignInCommand}" />
+            <Button
+                BackgroundColor="Transparent"
+                Command="{Binding BackToSignInCommand}"
+                Text="Back to Sign In"
+                TextColor="Blue" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
 
         </VerticalStackLayout>
     </ScrollView>

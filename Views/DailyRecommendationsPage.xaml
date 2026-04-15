@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="WorkoutManagerNoam.Views.DailyRecommendationsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Daily Tips">
+
+    <VerticalStackLayout
+        Padding="30"
+        Spacing="25"
+        VerticalOptions="Center">
+
+        <Label
+            FontAttributes="Bold"
+            FontSize="30"
+            HorizontalOptions="Center"
+            Text="Daily Recommendation" />
+
+        <Frame
+            Padding="20"
+            BorderColor="LightGray"
+            CornerRadius="15">
+
+            <Label
+                x:Name="RecommendationLabel"
+                FontSize="20"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Press the button to get a tip" />
+
+        </Frame>
+
+        <Button Clicked="GetRecommendation_Clicked" Text="Get Recommendation" />
+
+    </VerticalStackLayout>
+</ContentPage>

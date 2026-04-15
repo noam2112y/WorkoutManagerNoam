@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WorkoutManagerNoam.Views.MainPage"
-             Title="MainPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to Main Page"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="WorkoutManagerNoam.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Welcome"
+    Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <VerticalStackLayout
+            Padding="30"
+            Spacing="20"
+            VerticalOptions="Center">
+
+            <Label
+                FontAttributes="Bold"
+                FontSize="32"
+                HorizontalOptions="Center"
+                Text="Kids Saving App" />
+
+            <Label
+                FontSize="18"
+                HorizontalOptions="Center"
+                Text="Save smart, grow rewards" />
+
+            <Image
+                HeightRequest="180"
+                HorizontalOptions="Center"
+                Source="dotnet_bot.png" />
+
+            <Button Command="{Binding GoToSignInCommand}" Text="Sign In" />
+
+            <Button Command="{Binding GoToSignUpCommand}" Text="Sign Up" />
+
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>
