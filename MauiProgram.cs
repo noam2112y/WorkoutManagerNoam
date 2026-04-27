@@ -41,7 +41,8 @@ namespace WorkoutManagerNoam
         public static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
         {
             builder.Services.AddSingleton<MainPage>();
-            builder.Services.AddSingleton<MainPageViewModel>();
+
+            builder.Services.AddTransient<SignInPage>();
             builder.Services.AddTransient<SignUpPage>();
 
             builder.Services.AddTransient<ParentHomePage>();
@@ -52,14 +53,12 @@ namespace WorkoutManagerNoam
             builder.Services.AddTransient<DailyRecommendationsPage>();
             builder.Services.AddTransient<ChildExpensePage>();
             builder.Services.AddTransient<AddChallengePage>();
-            builder.Services.AddTransient<ChallengesPage>();
             builder.Services.AddTransient<SOSPage>();
             builder.Services.AddTransient<ParentExpensesPage>();
-            builder.Services.AddTransient<ChildExpensePage>();
             builder.Services.AddTransient<ExpenseDaysPage>();
             builder.Services.AddTransient<DailySummaryPage>();
 
-            builder.Services.AddTransient<AppShell>();
+            builder.Services.AddSingleton<AppShell>();
 
             return builder;
         }
@@ -72,8 +71,6 @@ namespace WorkoutManagerNoam
             builder.Services.AddTransient<SignUpViewModel>();
 
             builder.Services.AddSingleton<AppShellViewModel>();
-
-            //builder.Services.AddTransient<UsersListPageViewModel>();
 
             return builder;
         }
