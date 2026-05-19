@@ -4,14 +4,18 @@ namespace WorkoutManagerNoam.Views;
 
 public partial class PaymentPage : ContentPage
 {
-    public PaymentPage()
+    private readonly IDBService _db;
+
+    public PaymentPage(IDBService db)
     {
         InitializeComponent();
+        _db = db;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
+
         AmountLabel.Text = $"Amount: {AppState.PendingAmount}";
     }
 
@@ -22,7 +26,10 @@ public partial class PaymentPage : ContentPage
         string expiry = ExpiryEntry.Text ?? "";
         string cvv = CvvEntry.Text ?? "";
 
-        if (holder.Trim() == "" || card.Trim() == "" || expiry.Trim() == "" || cvv.Trim() == "")
+        if (holder.Trim() == "" ||
+            card.Trim() == "" ||
+            expiry.Trim() == "" ||
+            cvv.Trim() == "")
         {
             await DisplayAlert("Error", "Please fill all payment details", "OK");
             return;
@@ -36,8 +43,11 @@ public partial class PaymentPage : ContentPage
 
         AppState.SelectedChild.Balance += AppState.PendingAmount;
 
-        await DisplayAlert("Success",
-            $"Payment completed. {AppState.SelectedChild.FirstName} new balance: {AppState.SelectedChild.Balance}",
+        _db.UpdateUser(AppState.SelectedChild);
+
+        await DisplayAlert(
+            "Success",
+            $"Payment completed.\n{AppState.SelectedChild.FirstName} new balance: {AppState.SelectedChild.Balance}",
             "OK");
 
         AppState.PendingAmount = 0;

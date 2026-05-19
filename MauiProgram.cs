@@ -77,8 +77,7 @@ namespace WorkoutManagerNoam
 
         public static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
         {
-            builder.Services.AddSingleton<IDBService, DBMokup>();
-
+            builder.Services.AddSingleton<IDBService, FirebaseDBService>();
             return builder;
         }
     }
