@@ -1,109 +1,181 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <ContentPage
     x:Class="WorkoutManagerNoam.Views.SignInPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:WorkoutManagerNoam.ViewModels"
-    Title="SignInPage"
     x:DataType="vm:SignInViewModel"
+    Title="Sign In"
+    BackgroundColor="#F4F7FB"
     NavigationPage.HasBackButton="False">
 
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Offset="0.0" Color="LightCyan" />
-            <GradientStop Offset="0.5" Color="#3a7bd5" />
-            <GradientStop Offset="1.0" Color="Purple" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+    <ScrollView>
+        <Grid
+            Padding="28"
+            RowDefinitions="*,Auto,*">
 
-    <VerticalStackLayout
-        Padding="30"
-        Spacing="25"
-        VerticalOptions="Center">
+            <Border
+                Grid.Row="1"
+                Padding="26"
+                BackgroundColor="White"
+                Stroke="#D8DEE9"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 22"
+                MaximumWidthRequest="430"
+                HorizontalOptions="Center">
 
-        <Label
-            FontAttributes="Bold"
-            FontSize="25"
-            Text="כניסה"
-            TextColor="Black" />
+                <Border.Shadow>
+                    <Shadow Brush="#33000000" Offset="0,8" Radius="18" Opacity="0.25" />
+                </Border.Shadow>
 
-        <Border
-            Padding="10"
-            Stroke="Black"
-            StrokeShape="RoundRectangle 8"
-            StrokeThickness="1">
-            <Entry
-                FontSize="18"
-                Keyboard="Email"
-                Placeholder="Email"
-                PlaceholderColor="Black"
-                Text="{Binding FirstName}"
-                TextColor="Black" />
-        </Border>
+                <VerticalStackLayout Spacing="20">
 
-        <Border
-            Stroke="Black"
-            StrokeShape="RoundRectangle 8"
-            StrokeThickness="1">
-            <Grid
-                Padding="10"
-                ColumnDefinitions="*,Auto"
-                VerticalOptions="Center">
+                    <VerticalStackLayout Spacing="6">
+                        <Label
+                            Text="Workout Manager"
+                            FontSize="28"
+                            FontAttributes="Bold"
+                            TextColor="#16233A"
+                            HorizontalTextAlignment="Center" />
 
-                <Entry
-                    BackgroundColor="Transparent"
-                    FontSize="18"
-                    IsPassword="{Binding EntryAsPassword}"
-                    Placeholder="סיסמה"
-                    PlaceholderColor="Black"
-                    Text="{Binding UserPassword}"
-                    TextColor="Black"
-                    VerticalOptions="Center" />
+                        <Label
+                            Text="Sign in to continue"
+                            FontSize="15"
+                            TextColor="#6B7280"
+                            HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
 
-                <Button
-                    Margin="5,0,0,0"
-                    Padding="0"
-                    BackgroundColor="Transparent"
-                    Command="{Binding ShowPasswordCommand}"
-                    FontFamily="MaterialIcons"
-                    FontSize="24"
-                    HorizontalOptions="End"
-                    Text="{Binding PassIcon}"
-                    TextColor="Black"
-                    VerticalOptions="Center" />
-            </Grid>
-        </Border>
+                    <BoxView
+                        HeightRequest="1"
+                        BackgroundColor="#E5E7EB"
+                        Margin="0,6,0,4" />
 
-        <Button
-            Command="{Binding SignInCommand}"
-            CornerRadius="8"
-            FontSize="18"
-            HeightRequest="50"
-            IsEnabled="{Binding IsSignInButtonEnabled}"
-            Text="חיבור"
-            TextColor="Black" />
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            Text="Email"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#374151" />
 
-        <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
-            <Label Text="אין לך משתמש?" TextColor="Black" />
-            <Button
-                BackgroundColor="Transparent"
-                Command="{Binding NavigateToSignUpCommand}"
-                Text="SignUp"
-                TextColor="Black" />
-        </HorizontalStackLayout>
-        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-            <CheckBox IsChecked="{Binding RememberMe}" Color="White" />
-            <Label
-                FontSize="16"
-                Text="Remember me"
-                TextColor="Black" />
-        </HorizontalStackLayout>
-        <Label
-            FontSize="28"
-            HorizontalTextAlignment="Center"
-            IsVisible="{Binding SingInMessageVisible}"
-            Text="{Binding LoginMessage}"
-            TextColor="Red" />
+                        <Border
+                            Padding="14,4"
+                            BackgroundColor="#F9FAFB"
+                            Stroke="#CBD5E1"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 12">
 
-    </VerticalStackLayout>
+                            <Entry
+                                Text="{Binding FirstName}"
+                                Keyboard="Email"
+                                Placeholder="Enter your email"
+                                PlaceholderColor="#9CA3AF"
+                                TextColor="#111827"
+                                FontSize="16"
+                                BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            Text="Password"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#374151" />
+
+                        <Border
+                            BackgroundColor="#F9FAFB"
+                            Stroke="#CBD5E1"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 12">
+
+                            <Grid
+                                Padding="14,4"
+                                ColumnDefinitions="*,Auto">
+
+                                <Entry
+                                    Grid.Column="0"
+                                    Text="{Binding UserPassword}"
+                                    IsPassword="{Binding EntryAsPassword}"
+                                    Placeholder="Enter your password"
+                                    PlaceholderColor="#9CA3AF"
+                                    TextColor="#111827"
+                                    FontSize="16"
+                                    BackgroundColor="Transparent"
+                                    VerticalOptions="Center" />
+
+                                <Button
+                                    Grid.Column="1"
+                                    Text="{Binding PassIcon}"
+                                    Command="{Binding ShowPasswordCommand}"
+                                    FontFamily="MaterialIcons"
+                                    FontSize="23"
+                                    BackgroundColor="Transparent"
+                                    TextColor="#374151"
+                                    Padding="8,0"
+                                    WidthRequest="46"
+                                    HeightRequest="42"
+                                    VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout
+                        Spacing="8"
+                        VerticalOptions="Center">
+
+                        <CheckBox
+                            IsChecked="{Binding RememberMeChecked}"
+                            Color="#1D4ED8"
+                            VerticalOptions="Center" />
+
+                        <Label
+                            Text="Remember me"
+                            FontSize="15"
+                            TextColor="#374151"
+                            VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Label
+                        Text="{Binding LoginMessage}"
+                        IsVisible="{Binding SingInMessageVisible}"
+                        TextColor="#DC2626"
+                        FontSize="14"
+                        HorizontalTextAlignment="Center" />
+
+                    <Button
+                        Text="Sign In"
+                        Command="{Binding SignInCommand}"
+                        IsEnabled="{Binding IsSignInButtonEnabled}"
+                        HeightRequest="52"
+                        CornerRadius="14"
+                        BackgroundColor="#1D4ED8"
+                        TextColor="White"
+                        FontSize="17"
+                        FontAttributes="Bold" />
+
+                    <HorizontalStackLayout
+                        HorizontalOptions="Center"
+                        Spacing="6">
+
+                        <Label
+                            Text="Don't have an account?"
+                            TextColor="#6B7280"
+                            FontSize="14"
+                            VerticalOptions="Center" />
+
+                        <Button
+                            Text="Sign Up"
+                            Command="{Binding NavigateToSignUpCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="#1D4ED8"
+                            FontAttributes="Bold"
+                            Padding="0"
+                            FontSize="14" />
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </ScrollView>
 </ContentPage>

@@ -7,15 +7,19 @@ public partial class SignInPage : ContentPage
     public SignInPage(SignInViewModel vm)
     {
         InitializeComponent();
-        vm.Navigation = this.Navigation;
+
+        vm.Navigation = Navigation;
         BindingContext = vm;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
+
         if (BindingContext is SignInViewModel vm)
-            vm.Navigation = this.Navigation;
+        {
+            vm.Navigation = Navigation;
+            await vm.CheckRememberedUserAsync();
+        }
     }
-   
 }
