@@ -196,33 +196,43 @@ namespace WorkoutManagerNoam.ViewModels
                 await Shell.Current.GoToAsync(nameof(ChildHomePage));
         }
 
-        internal async void OnAppearing()
+        public async Task CheckRememberedUserAsync()
         {
             string? token = await SecureStorage.Default.GetAsync("current_user_object");
 
             if (string.IsNullOrEmpty(token))
+            {
                 return;
+            }
 
             User user = _db.GetUserByEmail(token);
 
             if (user == null)
+            {
+                SecureStorage.Default.Remove("current_user_object");
                 return;
+            }
 
             AppState.CurrentUser = user;
-            (App.Current as App)!.CurrentUser = user;
+            (Application.Current as App)!.CurrentUser = user;
 
-            AppShell shell =
-                IPlatformApplication.Current!.Services.GetService(typeof(AppShell)) as AppShell;
+            AppShell shell = MauiProgram.Services.GetService(typeof(AppShell)) as AppShell;
 
             if (shell == null)
+            {
                 return;
+            }
 
             Application.Current!.MainPage = shell;
 
             if (user.IsParent)
+            {
                 await Shell.Current.GoToAsync(nameof(ParentHomePage));
+            }
             else
+            {
                 await Shell.Current.GoToAsync(nameof(ChildHomePage));
+            }
         }
     }
 }
