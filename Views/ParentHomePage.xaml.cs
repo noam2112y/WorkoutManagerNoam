@@ -24,35 +24,74 @@ public partial class ParentHomePage : ContentPage
     {
         _children.Clear();
         ChildrenPicker.Items.Clear();
+        AppState.SelectedChild = null;
+
+        User? currentParent = AppState.CurrentUser;
+
+        if (currentParent == null || !currentParent.IsParent)
+        {
+            ChildLabel.Text = "Only parent users can choose a child";
+            return;
+        }
 
         List<User> allUsers = _db.GetAllUsers();
 
         for (int i = 0; i < allUsers.Count; i++)
         {
-            if (!allUsers[i].IsParent)
+            if (!allUsers[i].IsParent && allUsers[i].ParentId == currentParent.Id)
             {
                 _children.Add(allUsers[i]);
-                ChildrenPicker.Items.Add(allUsers[i].FirstName);
+                ChildrenPicker.Items.Add(allUsers[i].FirstName + " " + allUsers[i].LastName);
             }
         }
 
         if (_children.Count == 0)
         {
-            ChildLabel.Text = "No child found";
-            AppState.SelectedChild = null;
+            ChildLabel.Text = "No child connected to this parent";
+        }
+        else
+        {
+            ChildLabel.Text = "No child selected";
         }
     }
 
-    private void ChildrenPicker_SelectedIndexChanged(object sender, EventArgs e)
+    private async void ChildrenPicker_SelectedIndexChanged(object sender, EventArgs e)
     {
         int index = ChildrenPicker.SelectedIndex;
 
         if (index < 0 || index >= _children.Count)
+        {
+            AppState.SelectedChild = null;
             return;
+        }
 
-        AppState.SelectedChild = _children[index];
-        ChildLabel.Text = $"Selected child: {_children[index].FirstName}";
+        User? currentParent = AppState.CurrentUser;
+
+        if (currentParent == null || !currentParent.IsParent)
+        {
+            AppState.SelectedChild = null;
+            await DisplayAlert("Error", "Only parent users can choose a child", "OK");
+            return;
+        }
+
+        User selectedChild = _children[index];
+
+        if (selectedChild.ParentId != currentParent.Id)
+        {
+            AppState.SelectedChild = null;
+            await DisplayAlert("Error", "This child is not connected to your account", "OK");
+            return;
+        }
+
+        AppState.SelectedChild = selectedChild;
+        ChildLabel.Text = "Selected child: " + selectedChild.FirstName;
     }
+
+    private async void AddChild_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(SignUpPage));
+    }
+
     private async void ViewExpenses_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(ParentExpensesPage));
@@ -62,10 +101,12 @@ public partial class ParentHomePage : ContentPage
     {
         await Shell.Current.GoToAsync(nameof(AddChallengePage));
     }
+
     private async void ExpenseDays_Clicked(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync(nameof(ExpenseDaysPage));
     }
+
     private void Add50_Clicked(object sender, EventArgs e)
     {
         AppState.PendingAmount = 50;
@@ -89,6 +130,21 @@ public partial class ParentHomePage : ContentPage
         if (AppState.SelectedChild == null)
         {
             await DisplayAlert("Error", "Please choose a child first", "OK");
+            return;
+        }
+
+        User? currentParent = AppState.CurrentUser;
+
+        if (currentParent == null || !currentParent.IsParent)
+        {
+            await DisplayAlert("Error", "Only parent users can continue to payment", "OK");
+            return;
+        }
+
+        if (AppState.SelectedChild.ParentId != currentParent.Id)
+        {
+            AppState.SelectedChild = null;
+            await DisplayAlert("Error", "This child is not connected to your account", "OK");
             return;
         }
 

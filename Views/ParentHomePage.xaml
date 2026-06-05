@@ -49,6 +49,9 @@
 
             <Button Text="Add Challenge"
                 Clicked="AddChallenge_Clicked" />
+            <Button
+                Text="Add Child"
+                    Clicked="AddChild_Clicked" />
 
             <Button Text="Continue to Payment"
                     Clicked="ContinueToPayment_Clicked" />

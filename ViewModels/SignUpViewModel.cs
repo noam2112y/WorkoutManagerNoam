@@ -18,11 +18,10 @@ namespace WorkoutManagerNoam.ViewModels
         private string _userPassword = "";
         private string _mobile = "";
         private bool _isParent;
-
         private bool _entryAsPassword = true;
         private string _passwordIconCode = FontHelper.CLOSED_EYE_ICON;
-
         private bool _isBusy;
+
         public bool IsParent
         {
             get => _isParent;
@@ -32,54 +31,85 @@ namespace WorkoutManagerNoam.ViewModels
                 OnPropertyChanged();
             }
         }
+
         public string FirstName
         {
             get => _firstName;
-            set { _firstName = value; OnPropertyChanged(); }
+            set
+            {
+                _firstName = value;
+                OnPropertyChanged();
+            }
         }
 
         public string LastName
         {
             get => _lastName;
-            set { _lastName = value; OnPropertyChanged(); }
+            set
+            {
+                _lastName = value;
+                OnPropertyChanged();
+            }
         }
 
         public string UserEmail
         {
             get => _userEmail;
-            set { _userEmail = value; OnPropertyChanged(); }
+            set
+            {
+                _userEmail = value;
+                OnPropertyChanged();
+            }
         }
 
         public string UserPassword
         {
             get => _userPassword;
-            set { _userPassword = value; OnPropertyChanged(); }
+            set
+            {
+                _userPassword = value;
+                OnPropertyChanged();
+            }
         }
 
         public string Mobile
         {
             get => _mobile;
-            set { _mobile = value; OnPropertyChanged(); }
+            set
+            {
+                _mobile = value;
+                OnPropertyChanged();
+            }
         }
-
-        
 
         public bool EntryAsPassword
         {
             get => _entryAsPassword;
-            set { _entryAsPassword = value; OnPropertyChanged(); }
+            set
+            {
+                _entryAsPassword = value;
+                OnPropertyChanged();
+            }
         }
 
         public string PasswordIconCode
         {
             get => _passwordIconCode;
-            set { _passwordIconCode = value; OnPropertyChanged(); }
+            set
+            {
+                _passwordIconCode = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool IsBusy
         {
             get => _isBusy;
-            set { _isBusy = value; OnPropertyChanged(); }
+            set
+            {
+                _isBusy = value;
+                OnPropertyChanged();
+            }
         }
 
         public ICommand TogglePasswordCommand { get; }
@@ -98,9 +128,11 @@ namespace WorkoutManagerNoam.ViewModels
         private void TogglePassword()
         {
             EntryAsPassword = !EntryAsPassword;
-            PasswordIconCode = EntryAsPassword
-                ? FontHelper.CLOSED_EYE_ICON
-                : FontHelper.OPEN_EYE_ICON;
+
+            if (EntryAsPassword)
+                PasswordIconCode = FontHelper.CLOSED_EYE_ICON;
+            else
+                PasswordIconCode = FontHelper.OPEN_EYE_ICON;
         }
 
         private async Task GoBack()
@@ -136,6 +168,23 @@ namespace WorkoutManagerNoam.ViewModels
                 return;
             }
 
+            User? currentUser = AppState.CurrentUser;
+
+            bool parentCreatesChild = currentUser != null &&
+                                      currentUser.IsParent &&
+                                      !IsParent;
+
+            // לא מאפשרים ליצור משתמש ילד בלי שהורה מחובר
+            if (!IsParent && !parentCreatesChild)
+            {
+                IsBusy = false;
+                await Application.Current!.MainPage.DisplayAlert(
+                    "Error",
+                    "Child account must be created from a parent account",
+                    "OK");
+                return;
+            }
+
             User newUser = new User
             {
                 FirstName = first,
@@ -145,18 +194,38 @@ namespace WorkoutManagerNoam.ViewModels
                 UMobile = mobile,
                 IsParent = IsParent,
                 Balance = IsParent ? 0 : 100,
-                RegDate = DateTime.Now
+                RegDate = DateTime.Now,
+                ParentId = 0
             };
+
+            // כאן מתבצע הקישור האמיתי:
+            // אם הורה מחובר יוצר ילד, הילד מקבל את ה-ID של ההורה
+            if (parentCreatesChild)
+            {
+                newUser.ParentId = currentUser!.Id;
+            }
 
             _db.AddUser(newUser);
 
+            IsBusy = false;
+
+            // אם הורה יצר ילד — נשארים מחוברים כהורה, לא מעבירים את המשתמש לילד
+            if (parentCreatesChild)
+            {
+                await Application.Current!.MainPage.DisplayAlert(
+                    "Success",
+                    "Child account created successfully",
+                    "OK");
+
+                await Shell.Current.GoToAsync(nameof(ParentHomePage));
+                return;
+            }
+
+            // הרשמת הורה חדש רגילה
             AppState.CurrentUser = newUser;
             (Application.Current as App)!.CurrentUser = newUser;
 
-            AppShell shell =
-                IPlatformApplication.Current!.Services.GetService(typeof(AppShell)) as AppShell;
-
-            IsBusy = false;
+            AppShell shell = IPlatformApplication.Current!.Services.GetService(typeof(AppShell)) as AppShell;
 
             if (shell == null)
                 return;
