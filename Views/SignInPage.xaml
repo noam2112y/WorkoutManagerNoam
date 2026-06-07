@@ -1,199 +1,110 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <ContentPage
     x:Class="WorkoutManagerNoam.Views.SignInPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Shell.NavBarIsVisible="False"
-    BackgroundColor="#EEF2FF">
+    xmlns:vm="clr-namespace:WorkoutManagerNoam.ViewModels"
+    Title="SignInPage"
+    x:DataType="vm:SignInViewModel"
+    NavigationPage.HasBackButton="False">
 
-    <Grid RowDefinitions="Auto,*">
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Offset="0.0" Color="LightCyan" />
+            <GradientStop Offset="0.5" Color="#3a7bd5" />
+            <GradientStop Offset="1.0" Color="Purple" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
 
-        <!-- Top Header -->
-        <VerticalStackLayout
-            Grid.Row="0"
-            Padding="30,55,30,25"
-            Spacing="8">
+    <VerticalStackLayout
+        Padding="30"
+        Spacing="25"
+        VerticalOptions="Center">
 
+        <Label
+            FontAttributes="Bold"
+            FontSize="25"
+            Text="כניסה"
+            TextColor="Black" />
+
+        <Border
+            Padding="10"
+            Stroke="Black"
+            StrokeShape="RoundRectangle 8"
+            StrokeThickness="1">
+            <Entry
+                FontSize="18"
+                Keyboard="Email"
+                Placeholder="Email"
+                PlaceholderColor="Black"
+                Text="{Binding FirstName}"
+                TextColor="Black" />
+        </Border>
+
+        <Border
+            Stroke="Black"
+            StrokeShape="RoundRectangle 8"
+            StrokeThickness="1">
+            <Grid
+                Padding="10"
+                ColumnDefinitions="*,Auto"
+                VerticalOptions="Center">
+
+                <Entry
+                    BackgroundColor="Transparent"
+                    FontSize="18"
+                    IsPassword="{Binding EntryAsPassword}"
+                    Placeholder="סיסמה"
+                    PlaceholderColor="Black"
+                    Text="{Binding UserPassword}"
+                    TextColor="Black"
+                    VerticalOptions="Center" />
+
+                <Button
+                    Margin="5,0,0,0"
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ShowPasswordCommand}"
+                    FontFamily="MaterialIcons"
+                    FontSize="24"
+                    HorizontalOptions="End"
+                    Text="{Binding PassIcon}"
+                    TextColor="Black"
+                    VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <Button
+            Command="{Binding SignInCommand}"
+            CornerRadius="8"
+            FontSize="18"
+            HeightRequest="50"
+            IsEnabled="{Binding IsSignInButtonEnabled}"
+            Text="חיבור"
+            TextColor="Black" />
+
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
+            <Label Text="אין לך משתמש?" TextColor="Black" />
+            <Button
+                BackgroundColor="Transparent"
+                Command="{Binding NavigateToSignUpCommand}"
+                Text="SignUp"
+                TextColor="Black" />
+        </HorizontalStackLayout>
+        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+            <CheckBox IsChecked="{Binding RememberMe}" Color="White" />
             <Label
-                Text="Workout Manager"
-                FontSize="34"
-                FontAttributes="Bold"
-                TextColor="#1E1B4B"
-                HorizontalOptions="Center" />
+                FontSize="16"
+                Text="Remember me"
+                TextColor="Black" />
+        </HorizontalStackLayout>
+        <Label
+            FontSize="28"
+            HorizontalTextAlignment="Center"
+            IsVisible="{Binding SingInMessageVisible}"
+            Text="{Binding LoginMessage}"
+            TextColor="Red" />
 
-            <Label
-                Text="Manage workouts, expenses and challenges"
-                FontSize="15"
-                TextColor="#6366F1"
-                HorizontalTextAlignment="Center"
-                HorizontalOptions="Center" />
-
-        </VerticalStackLayout>
-
-        <!-- Login Area -->
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout
-                Padding="24"
-                Spacing="20">
-
-                <Border
-                    BackgroundColor="White"
-                    Stroke="#E0E7FF"
-                    StrokeThickness="1"
-                    StrokeShape="RoundRectangle 28"
-                    Padding="24">
-
-                    <VerticalStackLayout Spacing="18">
-
-                        <VerticalStackLayout Spacing="4">
-                            <Label
-                                Text="Welcome Back"
-                                FontSize="26"
-                                FontAttributes="Bold"
-                                TextColor="#111827"
-                                HorizontalOptions="Center" />
-
-                            <Label
-                                Text="Sign in to continue"
-                                FontSize="15"
-                                TextColor="#6B7280"
-                                HorizontalOptions="Center" />
-                        </VerticalStackLayout>
-
-                        <!-- Email -->
-                        <VerticalStackLayout Spacing="6">
-                            <Label
-                                Text="Email"
-                                FontSize="14"
-                                FontAttributes="Bold"
-                                TextColor="#374151" />
-
-                            <Border
-                                BackgroundColor="#F9FAFB"
-                                Stroke="#D1D5DB"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 16"
-                                Padding="12,0">
-
-                                <Entry
-                                    Text="{Binding UserEmail}"
-                                    Placeholder="Enter your email"
-                                    Keyboard="Email"
-                                    BackgroundColor="Transparent"
-                                    TextColor="#111827"
-                                    PlaceholderColor="#9CA3AF"
-                                    HeightRequest="50" />
-
-                            </Border>
-                        </VerticalStackLayout>
-
-                        <!-- Password -->
-                        <VerticalStackLayout Spacing="6">
-                            <Label
-                                Text="Password"
-                                FontSize="14"
-                                FontAttributes="Bold"
-                                TextColor="#374151" />
-
-                            <Border
-                                BackgroundColor="#F9FAFB"
-                                Stroke="#D1D5DB"
-                                StrokeThickness="1"
-                                StrokeShape="RoundRectangle 16"
-                                Padding="12,0">
-
-                                <Grid ColumnDefinitions="*,Auto">
-
-                                    <Entry
-                                        Grid.Column="0"
-                                        Text="{Binding UserPassword}"
-                                        Placeholder="Enter your password"
-                                        IsPassword="{Binding EntryAsPassword}"
-                                        BackgroundColor="Transparent"
-                                        TextColor="#111827"
-                                        PlaceholderColor="#9CA3AF"
-                                        HeightRequest="50" />
-
-                                    <Button
-                                        Grid.Column="1"
-                                        Text="{Binding PasswordIconCode}"
-                                        Command="{Binding TogglePasswordCommand}"
-                                        BackgroundColor="Transparent"
-                                        TextColor="#4F46E5"
-                                        FontFamily="FaSolid"
-                                        FontSize="17"
-                                        WidthRequest="46"
-                                        HeightRequest="46"
-                                        Padding="0" />
-
-                                </Grid>
-
-                            </Border>
-                        </VerticalStackLayout>
-
-                        <!-- Sign In Button -->
-                        <Button
-                            Text="Sign In"
-                            Command="{Binding SignInCommand}"
-                            BackgroundColor="#4F46E5"
-                            TextColor="White"
-                            FontSize="17"
-                            FontAttributes="Bold"
-                            CornerRadius="18"
-                            HeightRequest="54"
-                            Margin="0,8,0,0" />
-
-                        <!-- Loading -->
-                        <ActivityIndicator
-                            IsRunning="{Binding IsBusy}"
-                            IsVisible="{Binding IsBusy}"
-                            Color="#4F46E5"
-                            HorizontalOptions="Center" />
-
-                        <!-- Sign Up -->
-                        <Grid
-                            ColumnDefinitions="*,Auto,*"
-                            Margin="0,6,0,0">
-
-                            <BoxView
-                                Grid.Column="0"
-                                HeightRequest="1"
-                                BackgroundColor="#E5E7EB"
-                                VerticalOptions="Center" />
-
-                            <Label
-                                Grid.Column="1"
-                                Text="  or  "
-                                TextColor="#9CA3AF"
-                                FontSize="14"
-                                VerticalOptions="Center" />
-
-                            <BoxView
-                                Grid.Column="2"
-                                HeightRequest="1"
-                                BackgroundColor="#E5E7EB"
-                                VerticalOptions="Center" />
-
-                        </Grid>
-
-                        <Button
-                            Text="Create New Account"
-                            Command="{Binding GoToSignUpCommand}"
-                            BackgroundColor="White"
-                            TextColor="#4F46E5"
-                            BorderColor="#4F46E5"
-                            BorderWidth="1"
-                            FontSize="16"
-                            FontAttributes="Bold"
-                            CornerRadius="18"
-                            HeightRequest="52" />
-
-                    </VerticalStackLayout>
-
-                </Border>
-
-            </VerticalStackLayout>
-        </ScrollView>
-
-    </Grid>
+    </VerticalStackLayout>
 </ContentPage>
