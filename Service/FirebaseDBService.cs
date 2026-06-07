@@ -5,11 +5,14 @@ using WorkoutManagerNoam.Models;
 
 namespace WorkoutManagerNoam.Service
 {
+    // מימוש שירות הנתונים מול Firebase.
     public class FirebaseDBService : IDBService
     {
+        // כתובת Firebase Realtime Database של הפרויקט.
         private const string FirebaseUrl =
             "https://workoutmanagernoam-260fb-default-rtdb.europe-west1.firebasedatabase.app/";
 
+        // אובייקט לביצוע בקשות HTTP מול Firebase.
         private readonly HttpClient _httpClient;
 
         public FirebaseDBService()
@@ -19,15 +22,17 @@ namespace WorkoutManagerNoam.Service
 
         public List<User> GetAllUsers()
         {
+            // קריאת כל המשתמשים מהנתיב users במסד הנתונים.
             string url = FirebaseUrl + "users.json";
-
             string json = _httpClient.GetStringAsync(url).Result;
 
+            // אם אין נתונים במסד הנתונים, מוחזרת רשימה ריקה.
             if (string.IsNullOrWhiteSpace(json) || json == "null")
                 return new List<User>();
 
             try
             {
+                // ניסיון לקרוא את הנתונים כמילון לפי מזהה משתמש.
                 Dictionary<string, User>? data =
                     JsonSerializer.Deserialize<Dictionary<string, User>>(json);
 
@@ -40,6 +45,7 @@ namespace WorkoutManagerNoam.Service
             {
                 try
                 {
+                    // ניסיון נוסף לקרוא את הנתונים כרשימה.
                     List<User>? list =
                         JsonSerializer.Deserialize<List<User>>(json);
 
@@ -47,9 +53,9 @@ namespace WorkoutManagerNoam.Service
                         return new List<User>();
 
                     List<User> cleanList = new List<User>();
-
                     int i = 0;
 
+                    // ניקוי ערכים ריקים מתוך הרשימה.
                     while (i < list.Count)
                     {
                         if (list[i] != null)
@@ -62,6 +68,7 @@ namespace WorkoutManagerNoam.Service
                 }
                 catch
                 {
+                    // במקרה של שגיאה בקריאת הנתונים, מוחזרת רשימה ריקה.
                     return new List<User>();
                 }
             }
@@ -69,6 +76,7 @@ namespace WorkoutManagerNoam.Service
 
         public User GetUserByEmail(string uEmail)
         {
+            // חיפוש משתמש לפי אימייל מתוך רשימת המשתמשים.
             List<User> users = GetAllUsers();
 
             int i = 0;
@@ -86,6 +94,7 @@ namespace WorkoutManagerNoam.Service
 
         public bool IsExist(string uEmail, string uPass)
         {
+            // בדיקת התחברות לפי אימייל וסיסמה.
             List<User> users = GetAllUsers();
 
             int i = 0;
@@ -106,12 +115,13 @@ namespace WorkoutManagerNoam.Service
 
         public void AddUser(User user)
         {
+            // קבלת כל המשתמשים כדי ליצור מזהה חדש.
             List<User> users = GetAllUsers();
 
             int maxId = 0;
-
             int i = 0;
 
+            // מציאת המזהה הגבוה ביותר הקיים כרגע.
             while (i < users.Count)
             {
                 if (users[i].Id > maxId)
@@ -120,8 +130,10 @@ namespace WorkoutManagerNoam.Service
                 i++;
             }
 
+            // יצירת מזהה חדש למשתמש.
             user.Id = maxId + 1;
 
+            // שמירת המשתמש לפי המזהה שלו ב-Firebase.
             string url = FirebaseUrl + "users/" + user.Id + ".json";
 
             string json = JsonSerializer.Serialize(user);
@@ -134,6 +146,7 @@ namespace WorkoutManagerNoam.Service
 
         public void RemoveUser(User user)
         {
+            // מחיקת משתמש לפי המזהה שלו.
             string url = FirebaseUrl + "users/" + user.Id + ".json";
 
             _httpClient.DeleteAsync(url).Wait();
@@ -141,6 +154,7 @@ namespace WorkoutManagerNoam.Service
 
         public void UpdateUser(User user)
         {
+            // עדכון משתמש קיים לפי המזהה שלו.
             string url = FirebaseUrl + "users/" + user.Id + ".json";
 
             string json = JsonSerializer.Serialize(user);

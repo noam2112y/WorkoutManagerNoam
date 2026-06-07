@@ -1,110 +1,232 @@
 <?xml version="1.0" encoding="utf-8" ?>
-
 <ContentPage
     x:Class="WorkoutManagerNoam.Views.SignInPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:WorkoutManagerNoam.ViewModels"
-    Title="SignInPage"
-    x:DataType="vm:SignInViewModel"
-    NavigationPage.HasBackButton="False">
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#F4F7FB">
 
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Offset="0.0" Color="LightCyan" />
-            <GradientStop Offset="0.5" Color="#3a7bd5" />
-            <GradientStop Offset="1.0" Color="Purple" />
-        </LinearGradientBrush>
-    </ContentPage.Background>
+    <Grid>
 
-    <VerticalStackLayout
-        Padding="30"
-        Spacing="25"
-        VerticalOptions="Center">
+        <!-- רקע עליון -->
+        <BoxView HeightRequest="330"
+                 VerticalOptions="Start">
+            <BoxView.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#1E3A8A" Offset="0.0" />
+                    <GradientStop Color="#2563EB" Offset="0.55" />
+                    <GradientStop Color="#38BDF8" Offset="1.0" />
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
 
-        <Label
-            FontAttributes="Bold"
-            FontSize="25"
-            Text="כניסה"
-            TextColor="Black" />
+        <ScrollView>
+            <VerticalStackLayout Padding="24,55,24,30"
+                                 Spacing="24">
 
-        <Border
-            Padding="10"
-            Stroke="Black"
-            StrokeShape="RoundRectangle 8"
-            StrokeThickness="1">
-            <Entry
-                FontSize="18"
-                Keyboard="Email"
-                Placeholder="Email"
-                PlaceholderColor="Black"
-                Text="{Binding FirstName}"
-                TextColor="Black" />
-        </Border>
+                <!-- כותרת עליונה -->
+                <VerticalStackLayout Spacing="8"
+                                     HorizontalOptions="Center">
 
-        <Border
-            Stroke="Black"
-            StrokeShape="RoundRectangle 8"
-            StrokeThickness="1">
-            <Grid
-                Padding="10"
-                ColumnDefinitions="*,Auto"
-                VerticalOptions="Center">
+                    <Frame HeightRequest="82"
+                           WidthRequest="82"
+                           CornerRadius="41"
+                           Padding="0"
+                           BorderColor="Transparent"
+                           BackgroundColor="White"
+                           HasShadow="True">
 
-                <Entry
-                    BackgroundColor="Transparent"
-                    FontSize="18"
-                    IsPassword="{Binding EntryAsPassword}"
-                    Placeholder="סיסמה"
-                    PlaceholderColor="Black"
-                    Text="{Binding UserPassword}"
-                    TextColor="Black"
-                    VerticalOptions="Center" />
+                        <Label Text="💰"
+                               FontSize="38"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Frame>
 
-                <Button
-                    Margin="5,0,0,0"
-                    Padding="0"
-                    BackgroundColor="Transparent"
-                    Command="{Binding ShowPasswordCommand}"
-                    FontFamily="MaterialIcons"
-                    FontSize="24"
-                    HorizontalOptions="End"
-                    Text="{Binding PassIcon}"
-                    TextColor="Black"
-                    VerticalOptions="Center" />
-            </Grid>
-        </Border>
+                    <Label Text="WorkoutManagerNoam"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           HorizontalTextAlignment="Center" />
 
-        <Button
-            Command="{Binding SignInCommand}"
-            CornerRadius="8"
-            FontSize="18"
-            HeightRequest="50"
-            IsEnabled="{Binding IsSignInButtonEnabled}"
-            Text="חיבור"
-            TextColor="Black" />
+                    <Label Text="Manage • Guide • Reward • Support"
+                           FontSize="14"
+                           TextColor="#E0F2FE"
+                           HorizontalTextAlignment="Center" />
 
-        <HorizontalStackLayout HorizontalOptions="Center" Spacing="6">
-            <Label Text="אין לך משתמש?" TextColor="Black" />
-            <Button
-                BackgroundColor="Transparent"
-                Command="{Binding NavigateToSignUpCommand}"
-                Text="SignUp"
-                TextColor="Black" />
-        </HorizontalStackLayout>
-        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
-            <CheckBox IsChecked="{Binding RememberMe}" Color="White" />
-            <Label
-                FontSize="16"
-                Text="Remember me"
-                TextColor="Black" />
-        </HorizontalStackLayout>
-        <Label
-            FontSize="28"
-            HorizontalTextAlignment="Center"
-            IsVisible="{Binding SingInMessageVisible}"
-            Text="{Binding LoginMessage}"
-            TextColor="Red" />
+                </VerticalStackLayout>
 
-    </VerticalStackLayout>
+                <!-- כרטיס התחברות -->
+                <Frame CornerRadius="28"
+                       Padding="24"
+                       BackgroundColor="White"
+                       BorderColor="Transparent"
+                       HasShadow="True">
+
+                    <VerticalStackLayout Spacing="18">
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="כניסה למערכת"
+                                   FontSize="26"
+                                   FontAttributes="Bold"
+                                   TextColor="#111827"
+                                   HorizontalTextAlignment="Center" />
+
+                            <Label Text="הזן אימייל וסיסמה כדי להמשיך"
+                                   FontSize="14"
+                                   TextColor="#6B7280"
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+
+                        <!-- אימייל -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="אימייל"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#374151" />
+
+                            <Frame CornerRadius="15"
+                                   Padding="14,0"
+                                   HeightRequest="54"
+                                   BackgroundColor="#F9FAFB"
+                                   BorderColor="#D1D5DB"
+                                   HasShadow="False">
+
+                                <Entry Text="{Binding FirstName}"
+                                       Placeholder="example@email.com"
+                                       PlaceholderColor="#9CA3AF"
+                                       TextColor="#111827"
+                                       Keyboard="Email"
+                                       FontSize="15"
+                                       BackgroundColor="Transparent"
+                                       VerticalOptions="Center" />
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- סיסמה -->
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="סיסמה"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="#374151" />
+
+                            <Frame CornerRadius="15"
+                                   Padding="14,0"
+                                   HeightRequest="54"
+                                   BackgroundColor="#F9FAFB"
+                                   BorderColor="#D1D5DB"
+                                   HasShadow="False">
+
+                                <Grid ColumnDefinitions="*,45">
+
+                                    <Entry Grid.Column="0"
+                                           Text="{Binding UserPassword}"
+                                           Placeholder="הכנס סיסמה"
+                                           PlaceholderColor="#9CA3AF"
+                                           TextColor="#111827"
+                                           IsPassword="{Binding EntryAsPassword}"
+                                           FontSize="15"
+                                           BackgroundColor="Transparent"
+                                           VerticalOptions="Center" />
+
+                                    <Button Grid.Column="1"
+                                            Text="{Binding PassIcon}"
+                                            Command="{Binding ShowPasswordCommand}"
+                                            BackgroundColor="Transparent"
+                                            TextColor="#2563EB"
+                                            FontSize="18"
+                                            Padding="0"
+                                            WidthRequest="42"
+                                            HeightRequest="42" />
+
+                                </Grid>
+                            </Frame>
+                        </VerticalStackLayout>
+
+                        <!-- זכור אותי -->
+                        <Grid ColumnDefinitions="Auto,*"
+                              ColumnSpacing="8"
+                              HorizontalOptions="Start">
+
+                            <CheckBox Grid.Column="0"
+                                      IsChecked="{Binding RememberMeChecked}"
+                                      Color="#2563EB" />
+
+                            <Label Grid.Column="1"
+                                   Text="זכור אותי"
+                                   FontSize="14"
+                                   TextColor="#374151"
+                                   VerticalOptions="Center" />
+                        </Grid>
+
+                        <!-- הודעת שגיאה / מצב -->
+                        <Frame IsVisible="{Binding SingInMessageVisible}"
+                               CornerRadius="12"
+                               Padding="12"
+                               BackgroundColor="#FEF2F2"
+                               BorderColor="#FECACA"
+                               HasShadow="False">
+
+                            <Label Text="{Binding LoginMessage}"
+                                   TextColor="#B91C1C"
+                                   FontSize="14"
+                                   HorizontalTextAlignment="Center" />
+                        </Frame>
+
+                        <!-- כפתור התחברות -->
+                        <Button Text="התחבר"
+                                Command="{Binding SignInCommand}"
+                                IsEnabled="{Binding IsSignInButtonEnabled}"
+                                HeightRequest="54"
+                                CornerRadius="16"
+                                BackgroundColor="#2563EB"
+                                TextColor="White"
+                                FontSize="17"
+                                FontAttributes="Bold" />
+
+                        <!-- מעבר להרשמה -->
+                        <Grid ColumnDefinitions="*,Auto,*"
+                              ColumnSpacing="8"
+                              Margin="0,4,0,0">
+
+                            <BoxView Grid.Column="0"
+                                     HeightRequest="1"
+                                     BackgroundColor="#E5E7EB"
+                                     VerticalOptions="Center" />
+
+                            <Label Grid.Column="1"
+                                   Text="או"
+                                   FontSize="13"
+                                   TextColor="#9CA3AF"
+                                   VerticalOptions="Center" />
+
+                            <BoxView Grid.Column="2"
+                                     HeightRequest="1"
+                                     BackgroundColor="#E5E7EB"
+                                     VerticalOptions="Center" />
+                        </Grid>
+
+                        <Button Text="יצירת משתמש חדש"
+                                Command="{Binding NavigateToSignUpCommand}"
+                                HeightRequest="50"
+                                CornerRadius="16"
+                                BackgroundColor="#EFF6FF"
+                                BorderColor="#BFDBFE"
+                                BorderWidth="1"
+                                TextColor="#1D4ED8"
+                                FontSize="15"
+                                FontAttributes="Bold" />
+
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- טקסט תחתון -->
+                <Label Text="ניהול דמי כיס, הוצאות, אתגרים ותגמולים בין הורה לילד"
+                       FontSize="13"
+                       TextColor="#6B7280"
+                       HorizontalTextAlignment="Center"
+                       Margin="10,0" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
